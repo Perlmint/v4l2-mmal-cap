@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 project(v4l2-mmal-cap VERSION 0.1.0 LANGUAGES CXX)
 
+include(FindPkgConfig)
+
+# Default install path opn raspi-os
+list(APPEND CMAKE_PREFIX_PATH /opt/vc)
+
+pkg_search_module(BCM_HOST REQUIRED IMPORTED_TARGET bcm_host)
+pkg_search_module(MMAL REQUIRED IMPORTED_TARGET mmal)
+
 add_executable(v4l2-mmal-cap
     main.cpp
     camera.cpp camera.h
@@ -8,10 +16,4 @@ add_executable(v4l2-mmal-cap
 target_compile_features(v4l2-mmal-cap
     PRIVATE cxx_std_17)
 target_link_libraries(v4l2-mmal-cap
-    mmal bcm_host vcos vchiq_arm mmal mmal_core mmal_util mmal_vc_client pthread stdc++fs)
-target_link_directories(v4l2-mmal-cap
-    PRIVATE /opt/vc/lib
-)
-target_include_directories(v4l2-mmal-cap SYSTEM
-    PRIVATE /opt/vc/include
-)
+    PkgConfig::MMAL PkgConfig::BCM_HOST pthread stdc++fs)
