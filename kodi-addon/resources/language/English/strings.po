@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+
+msgctxt "#32000"
+msgid "Capture path"
+msgstr "Capture path"
+
+msgctxt "#32001"
+msgid "Capture device"
+msgstr "Capture device"
+
+msgctxt "#32002"
+msgid "Capture"
+msgstr "Capture"
+
+msgctxt "#32003"
+msgid "Album"
+msgstr "Capture"

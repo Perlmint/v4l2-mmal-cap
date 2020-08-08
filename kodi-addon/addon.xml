@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="kr.perlmint.rpi.capture" name="RPi Capture" version="0.1.0" provider-name="perlmint">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_US">RPi capture</summary>
+        <description lang="en_US">Capture with v4l2 for RPi</description>
+        <platform>linux</platform>
+        <language>en</language>
+    </extension>
+</addon>
