@@ -15,4 +15,4 @@ msgstr "Capture"
 
 msgctxt "#32003"
 msgid "Album"
-msgstr "Capture"
+msgstr "Album"
