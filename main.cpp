@@ -1,5 +1,7 @@
 #include <cstring>
 #include <filesystem>
+#include <chrono>
+#include <limits.h>
 
 #include "./camera.h"
 #include "./encoder.h"
@@ -31,14 +33,39 @@ uint32_t fourcc_from_path(const std::filesystem::path &p) {
   throw std::invalid_argument("Can't specify output encoder from extension of output path");
 }
 
+void append_filename(std::filesystem::path& dir) {
+    const auto now = std::chrono::system_clock::now();
+    const auto now_c = std::chrono::system_clock::to_time_t(now);
+    char date_buf[32];
+
+    strftime(date_buf, 32, "%F %T.jpg", std::localtime(&now_c));
+    dir /= date_buf;
+}
+
 int main(int argc, char **argv) {
-  if (argc < 3) {
-    printf("Usage: %s INPUT_DEVICE OUTPUT_PATH\n", argv[0]);
+  if (argc < 2) {
+    printf("Usage: %s INPUT_DEVICE [OUTPUT_PATH]\nDefault OUTPUT_PATH is <captured date>.jpg", argv[0]);
     return -1;
   }
 
   std::filesystem::path input_path = argv[1];
-  std::filesystem::path output_path = argv[2];
+  std::filesystem::path output_path;
+  if (argc >= 3) {
+    output_path = argv[2];
+
+    if (std::filesystem::is_directory(output_path)) {
+      append_filename(output_path);
+    }
+  } else {
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) == NULL) {
+      fprintf(stderr, "Failed to get working dir\n");
+      return 1;
+    } else {
+      output_path = cwd;
+      append_filename(output_path);
+    }
+  }
 
   Camera camera{input_path, IOMethod::MMAP};
 
@@ -63,6 +90,8 @@ int main(int argc, char **argv) {
   }
 
   camera.stop_capturing();
+
+  fprintf(stdout, output_path.c_str());
 
   return 0;
 }
